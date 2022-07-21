@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Basic Table</h2>
+    <a type="button" class="btn btn-success" href="/create">Create</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Date</th>
+            <th>Image</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="b,loop :${blogs}">
+            <td th:text="${loop.count}"></td>
+            <td th:text="${b.title}"></td>
+            <td th:text="${b.content}"></td>
+            <td th:text="${b.date}"></td>
+            <td><img th:src="${b.img}" height="200" width="200"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:if="${!blogs.isLast()}" th:href="@{blogs(page=${blogs.number + 1})}">>>></a>
+    <a th:if="${!blogs.isFirst()}" th:href="@{blogs(page=${blogs.number - 1})}"><<<<</a>
+</div>
+
+</body>
+</html>
