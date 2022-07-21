@@ -35,9 +35,13 @@
         </tr>
         </tbody>
     </table>
-    <a th:if="${!blogs.isLast()}" th:href="@{blogs(page=${blogs.number + 1})}">>>></a>
-    <a th:if="${!blogs.isFirst()}" th:href="@{blogs(page=${blogs.number - 1})}"><<<<</a>
-</div>
+    <b th:text="${blogs.number} + 1"></b> / <b th:text="${blogs.totalPages}"></b>
+    <br>
+    <button th:if="${blogs.hasPrevious()}"><a th:href="@{/blogs(page=${blogs.number}-1)}"><<<<<<</a></button>
+    <a th:each="i: ${#numbers.sequence(1, blogs.totalPages)}" class="active" th:text="${i}"
+       th:href="@{/blogs(page=${i} - 1)}"></a>
 
+    <button th:if="${blogs.hasNext()}"><a th:href="@{/blogs(page=${blogs.number}+1)}">>>>>>></a></button>
+</div>
 </body>
 </html>
