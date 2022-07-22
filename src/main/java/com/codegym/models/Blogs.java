@@ -1,9 +1,6 @@
 package com.codegym.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -15,16 +12,19 @@ public class Blogs {
     private String content;
     private String img;
     private Date date;
+    @ManyToOne
+    private Category category;
 
     public Blogs() {
     }
 
-    public Blogs(long id, String title, String content, String img, Date date) {
+    public Blogs(long id, String title, String content, String img, Date date, Category category) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.img = img;
         this.date = date;
+        this.category = category;
     }
 
     public long getId() {
@@ -65,6 +65,14 @@ public class Blogs {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
 

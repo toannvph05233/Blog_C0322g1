@@ -2,6 +2,7 @@ package com.codegym.controllers;
 
 import com.codegym.models.Blogs;
 import com.codegym.service.BlogService;
+import com.codegym.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,9 @@ public class BlogController {
     @Autowired
     BlogService blogService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @GetMapping("/blogs")
     public ModelAndView show(@RequestParam(defaultValue = "0") int page){
         ModelAndView modelAndView = new ModelAndView("home");
@@ -29,10 +33,18 @@ public class BlogController {
         return modelAndView;
     }
 
+    @PostMapping("/search")
+    public ModelAndView search(@RequestParam(defaultValue = "0") int page, @RequestParam String search){
+        ModelAndView modelAndView = new ModelAndView("home");
+        modelAndView.addObject("blogs", blogService.getAllByTitle(PageRequest.of(page, 2, Sort.by("date")),search));
+        return modelAndView;
+    }
+
     @GetMapping("/create")
     public ModelAndView showCreate(){
         ModelAndView modelAndView = new ModelAndView("create");
         modelAndView.addObject("blog", new Blogs());
+        modelAndView.addObject("categories", categoryService.getAll());
         return modelAndView;
     }
 

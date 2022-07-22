@@ -20,6 +20,9 @@ public class BlogService {
     public Page<Blogs> getAll(Pageable pageable) {
         return  iBlogRepo.findAll(pageable);
     }
+    public Page<Blogs> getAllByTitle(Pageable pageable, String title) {
+        return  iBlogRepo.findByTitleContaining(pageable,title);
+    }
 
     public void save(Blogs blogs) {
         iBlogRepo.save(blogs);
