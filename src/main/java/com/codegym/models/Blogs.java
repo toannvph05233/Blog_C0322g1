@@ -1,6 +1,11 @@
 package com.codegym.models;
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 
 @Entity
@@ -8,7 +13,10 @@ public class Blogs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Size(min = 3,message = "Min 3")
     private String title;
+    @NotNull(message = "Null roi")
+    @Column(nullable = false,columnDefinition = "toan")
     private String content;
     private String img;
     private Date date;

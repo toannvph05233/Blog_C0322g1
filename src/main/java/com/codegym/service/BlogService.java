@@ -36,5 +36,8 @@ public class BlogService {
         return iBlogRepo.findById(id);
     }
 
+    public Optional<Blogs> findByTitle(String title) {
+        return iBlogRepo.findByTitle(title);
+    }
 
 }
