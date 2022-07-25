@@ -2,8 +2,10 @@ package com.codegym.controllers;
 
 import com.codegym.models.Blogs;
 import com.codegym.models.Category;
+import com.codegym.models.Comment;
 import com.codegym.service.BlogService;
 import com.codegym.service.CategoryService;
+import com.codegym.service.CommentService;
 import com.codegym.validate.ValidateBlog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,6 +32,9 @@ public class BlogController {
 
     @Autowired
     ValidateBlog validateBlog;
+
+    @Autowired
+    CommentService commentService;
 
     @ModelAttribute(name = "blog")
     public Blogs blogs(){
@@ -63,6 +65,21 @@ public class BlogController {
         ModelAndView modelAndView = new ModelAndView("create");
         return modelAndView;
     }
+    @GetMapping("/show")
+    public ModelAndView showBlog(@RequestParam long id) {
+        ModelAndView modelAndView = new ModelAndView("single-post");
+        modelAndView.addObject("comments",commentService.findAllByBlog(id));
+        modelAndView.addObject("blog_show", blogService.findById(id).get());
+        return modelAndView;
+    }
+    @PostMapping("/comment/{idBlog}")
+    public ModelAndView comment(Comment comment,@PathVariable("idBlog") long idBlog) {
+        Blogs blogs = blogService.findById(idBlog).get();
+        comment.setBlogs(blogs);
+        commentService.save(comment);
+        ModelAndView modelAndView = new ModelAndView("redirect:/show?id="+idBlog);
+        return modelAndView;
+    }
 
     @PostMapping("/create")
     public ModelAndView create(@Valid @ModelAttribute("blog") Blogs blogs,
@@ -73,7 +90,6 @@ public class BlogController {
             ModelAndView modelAndView = new ModelAndView("create");
             return modelAndView;
         }
-
         String nameImg = upImg.getOriginalFilename();
         try {
             FileCopyUtils.copy(upImg.getBytes(), new File("/Users/johntoan98gmail.com/Desktop/Blog/src/main/webapp/WEB-INF/img/" + nameImg));

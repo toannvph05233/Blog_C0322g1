@@ -34,7 +34,7 @@
         <tbody>
         <tr th:each="b,loop :${blogs}">
             <td th:text="${loop.count}"></td>
-            <td th:text="${b.title}"></td>
+            <td><a th:text="${b.title}" th:href="@{/show(id=${b.id})}"></a></td>
             <td th:text="${b.content}"></td>
             <td th:text="${b.date}"></td>
             <td><img th:src="${b.img}" height="200" width="200"></td>

@@ -16,7 +16,7 @@ public class Blogs {
     @Size(min = 3,message = "Min 3")
     private String title;
     @NotNull(message = "Null roi")
-    @Column(nullable = false,columnDefinition = "toan")
+    @Column(nullable = false)
     private String content;
     private String img;
     private Date date;
@@ -24,6 +24,7 @@ public class Blogs {
     private Category category;
 
     public Blogs() {
+
     }
 
     public Blogs(long id, String title, String content, String img, Date date, Category category) {
