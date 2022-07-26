@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -66,10 +68,16 @@ public class BlogController {
         return modelAndView;
     }
     @GetMapping("/show")
-    public ModelAndView showBlog(@RequestParam long id) {
+    public ModelAndView showBlog(@CookieValue(value = "count",defaultValue = "0") int count, @RequestParam long id, HttpServletResponse response) {
+        count ++;
+        Cookie cookie = new Cookie("count", String.valueOf(count));
+        cookie.setMaxAge(60*60);
+        response.addCookie(cookie);
+
         ModelAndView modelAndView = new ModelAndView("single-post");
         modelAndView.addObject("comments",commentService.findAllByBlog(id));
         modelAndView.addObject("blog_show", blogService.findById(id).get());
+        modelAndView.addObject("count", count);
         return modelAndView;
     }
     @PostMapping("/comment/{idBlog}")
